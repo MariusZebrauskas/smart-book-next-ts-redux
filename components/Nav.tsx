@@ -1,15 +1,72 @@
+import { gsap } from 'gsap';
 import Link from 'next/link';
 import React from 'react';
-
+import { FcMindMap } from 'react-icons/fc';
+import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
+import { closeMenu, openMenu } from '../redux/menuRedux';
+import { calendar, contact, home, todo } from '../redux/pageReducer';
+interface T extends DefaultRootState {
+  menu: boolean;
+  submenu: boolean;
+  page: string;
+}
 export const Nav = () => {
+  // avatar
+  const menu = useSelector<T>((store) => store.menu);
+  const page = useSelector<T>((store) => store.page);
+  console.log('page:', page);
+  //   submenu controler
+  const subMmenu = useSelector<T>((store) => store.submenu);
+  //   dispach function
+  const dispatch = useDispatch();
+
+  const avatar = () => {
+    //   avatar animation
+    if (menu) {
+      gsap.to('.avatar-GSAP', { y: 32, duration: 0.2, opacity: 0, display: 'none' });
+      return dispatch(closeMenu());
+    } else if (!menu) {
+      gsap.to('.avatar-GSAP', { y: 0, duration: 0.3, opacity: 1, display: 'block' });
+      return dispatch(openMenu());
+    }
+  };
+
+  const burger = () => {
+    //   open close sub menu
+    if (subMmenu) {
+      gsap.to('.submenuGSAP', { y: 8, duration: 0.2, opacity: 0, display: 'none' });
+      return dispatch(closeMenu());
+    } else if (!subMmenu) {
+      gsap.to('.submenuGSAP', { y: 0, duration: 0.3, opacity: 1, display: 'block' });
+      return dispatch(openMenu());
+    }
+  };
+
+  const changePageMenuBackground = (params: string) => {
+    //   change background to dark on page select
+    if (params === 'home') {
+      return dispatch(home());
+    } else if (params === 'todo') {
+      return dispatch(todo());
+    } else if (params === 'calendar') {
+      return dispatch(calendar());
+    } else if (params === 'contact') {
+      return dispatch(contact());
+    }
+  };
+
   return (
     <nav className='bg-gray-800'>
       <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
         <div className='relative flex items-center justify-between h-16'>
           <div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
             <button
+              onClick={burger}
               type='button'
-              className='inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'
+              className='inline-flex items-center justify-center p-2 rounded-md text-gray-400 
+              hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 
+              focus:ring-inset focus:ring-white
+              '
               aria-controls='mobile-menu'
               aria-expanded='false'
             >
@@ -50,22 +107,21 @@ export const Nav = () => {
           </div>
           <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
             <div className='flex-shrink-0 flex items-center'>
-              <img
-                className='block lg:hidden h-8 w-auto'
-                src='https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg'
-                alt='Workflow'
-              />
-              <img
-                className='hidden lg:block h-8 w-auto'
-                src='https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg'
-                alt='Workflow'
-              />
+              <FcMindMap className='block  h-8 w-auto mr-2 ' />
+              <h4 className='font-extrabold logo  tracking-wider text-xl font-mono text-white'>
+                SmartBook
+              </h4>
             </div>
             <div className='hidden sm:block sm:ml-6'>
               <div className='flex space-x-4'>
                 <Link href='/'>
                   <a
-                    className='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
+                    onClick={() => changePageMenuBackground('home')}
+                    className={
+                      page === 'home'
+                        ? 'bg-gray-900 text-white  px-3 py-2 rounded-md text-sm font-medium'
+                        : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
+                    }
                     aria-current='page'
                   >
                     Home
@@ -73,27 +129,42 @@ export const Nav = () => {
                 </Link>
 
                 <a
-                  href='#'
-                  className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+                  onClick={() => changePageMenuBackground('todo')}
+                  className={
+                    page === 'todo'
+                      ? 'bg-gray-900 text-white  px-3 py-2 rounded-md text-sm font-medium'
+                      : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
+                  }
                 >
                   Todo
                 </a>
 
                 <a
-                  href='#'
-                  className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+                  onClick={() => changePageMenuBackground('calendar')}
+                  className={
+                    page === 'calendar'
+                      ? 'bg-gray-900 text-white  px-3 py-2 rounded-md text-sm font-medium'
+                      : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
+                  }
                 >
                   Calendar
                 </a>
-                <Link href='contact'>
-                  <a className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
+                <Link href='/contact'>
+                  <a
+                    onClick={() => changePageMenuBackground('contact')}
+                    className={
+                      page === 'contact'
+                        ? 'bg-gray-900 text-white  px-3 py-2 rounded-md text-sm font-medium'
+                        : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
+                    }
+                  >
                     Contact
                   </a>
                 </Link>
               </div>
             </div>
           </div>
-          <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
+          <div className=' absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
             <button
               type='button'
               className='bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'
@@ -115,9 +186,9 @@ export const Nav = () => {
                 />
               </svg>
             </button>
-
+            {/* avatar */}
             <div className='ml-3 relative'>
-              <div>
+              <div onClick={avatar}>
                 <button
                   type='button'
                   className='bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'
@@ -133,15 +204,21 @@ export const Nav = () => {
                   />
                 </button>
               </div>
-
+              {/* sub avatar */}
               <div
-                className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'
+                className='avatar-GSAP origin-top-right absolute right-0 mt-2 w-48 
+                rounded-md shadow-lg py-1 bg-white ring-1
+                 ring-black ring-opacity-5 focus:outline-none
+                 translate-y-8
+                 opacity-0
+
+                 
+                 '
                 role='menu'
                 aria-orientation='vertical'
                 aria-labelledby='user-menu-button'
               >
                 <a
-                  href='#'
                   className='block px-4 py-2 text-sm text-gray-700'
                   role='menuitem'
                   id='user-menu-item-0'
@@ -149,7 +226,6 @@ export const Nav = () => {
                   Your Profile
                 </a>
                 <a
-                  href='#'
                   className='block px-4 py-2 text-sm text-gray-700'
                   role='menuitem'
                   id='user-menu-item-1'
@@ -157,7 +233,6 @@ export const Nav = () => {
                   Settings
                 </a>
                 <a
-                  href='#'
                   className='block px-4 py-2 text-sm text-gray-700'
                   role='menuitem'
                   id='user-menu-item-2'
@@ -170,12 +245,13 @@ export const Nav = () => {
         </div>
       </div>
 
-      <div className='sm:hidden' id='mobile-menu'>
-        <div className='px-2 pt-2 pb-3 space-y-1'>
+      {/* mobile menu */}
+
+      <div className='  sm:hidden' id='mobile-menu'>
+        <div className='submenuGSAP px-2 pt-2 pb-3 space-y-1'>
           <Link href='/'>
             <a
-              href='#'
-              className='bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium'
+              className=' text-white block px-3 py-2 rounded-md text-base font-medium'
               aria-current='page'
             >
               Home
@@ -186,13 +262,10 @@ export const Nav = () => {
             Todo
           </a>
 
-          <a
-            href='#'
-            className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
-          >
+          <a className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'>
             Calendar
           </a>
-          <Link href='contact'>
+          <Link href='/contact'>
             <a className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'>
               Contact
             </a>
