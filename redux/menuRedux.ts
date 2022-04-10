@@ -17,7 +17,8 @@ export const closeMenu = () => {
   };
 };
 
-// reducer
+// reducer 
+// Aatar menu
 
 export const menuReducer = (state = false, action: Types) => {
   switch (action.type) {

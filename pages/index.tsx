@@ -1,19 +1,44 @@
-import { useDispatch } from 'react-redux';
+import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
 import Card from '../components/Card';
 import TwoCards from '../components/TwoCards';
 import { homePage } from '../redux/pageReducer';
 import { useEffect } from 'react';
+import { closeSubmenu } from '../redux/submenuReducer';
+import { closeMenu } from '../redux/menuRedux';
+
+interface T extends DefaultRootState {
+  submenu: boolean;
+}
 
 const IndexPage = () => {
   // redux variables
   const dispatch = useDispatch();
+  const submenu = useSelector<T>((store) => store.submenu);
 
   useEffect(() => {
+    console.log('page loaded');
+
     // set homepage varaibles
     dispatch(homePage());
+    if (submenu) {
+      console.log('shlud close');
+      dispatch(closeSubmenu());
+    }
   }, []);
+
+  // close sub menu on mouse leave menu
+  const onMouseEnter = () => {
+    if (submenu) {
+      dispatch(closeSubmenu());
+    }
+  };
+
+
   return (
-    <header style={{ zIndex: -20 }} className='bg-white dark:bg-gray-800 mt-20 relative'>
+    <header
+      onMouseEnter={onMouseEnter}
+      className='bg-white dark:bg-gray-800 mt-20 relative'
+    >
       <div
         className='container flex flex-col px-6 py-10 mx-auto space-y-6 
       lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center'

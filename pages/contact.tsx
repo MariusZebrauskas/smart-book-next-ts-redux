@@ -1,20 +1,67 @@
+import gsap from 'gsap';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
 import { contactPage } from '../redux/pageReducer';
+import { closeSubmenu } from '../redux/submenuReducer';
 
-
+interface T extends DefaultRootState {
+  submenu: boolean;
+}
 
 const contact = () => {
-
   const dispatch = useDispatch();
-// Fixmme:: STATE looks same as page names
-  useEffect(() =>{
-    dispatch(contactPage())
+  const submenu = useSelector<T>((store) => store.submenu);
 
-  },[])
+  // on page load
+  useEffect(() => {
+    // set page
+    dispatch(contactPage());
+    // close sub menu
+    if (submenu) {
+      console.log('shlud close');
+      dispatch(closeSubmenu());
+    }
+  }, []);
+  // close sub menu animation opne close
+  useEffect(() => {
+    if (!submenu) {
+      gsap.fromTo(
+        '.submenuGSAP',
+        {
+          zIndex: -1,
+        },
+        {
+          y: '-15rem',
+          duration: 0.2,
+          opacity: 0,
+          display: 'none',
+          zIndex: -1,
+        }
+      );
+    } else if (submenu) {
+      gsap.fromTo(
+        '.submenuGSAP',
+        {
+          y: 0,
+          opacity: 1,
+          display: 'block',
+          zIndex: -1,
+        },
+        { zIndex: 5, duration: 0.3 }
+      );
+    }
+  }, [submenu]);
+
+  // close sub menu on mouse leave menu
+  const onMouseEnter = () => {
+    if (submenu) {
+      dispatch(closeSubmenu());
+    }
+  };
+
   return (
     <section
-      style={{ zIndex: -20 }}
+      onMouseEnter={onMouseEnter}
       className='w-full max-w-2xl px-6 py-4 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20 relative'
     >
       <h2 className='text-3xl font-semibold text-center text-gray-800 dark:text-white'>
