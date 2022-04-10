@@ -9,7 +9,7 @@ const Footer = () => {
             href='#'
             className='text-2xl font-bold text-gray-800 dark:text-white hover:text-gray-700 dark:hover:text-gray-300'
           >
-            Brand
+            Smart Book
           </a>
 
           <p className='max-w-md mx-auto mt-2 text-gray-500 dark:text-gray-400'>

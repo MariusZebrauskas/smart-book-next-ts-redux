@@ -1,18 +1,32 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
 import { unknownPage } from '../redux/pageReducer';
+import { closeSubmenu } from '../redux/submenuReducer';
+
+interface T extends DefaultRootState {
+  submenu: boolean;
+}
 
 const unknowPage = () => {
   // redux variables
   const dispatch = useDispatch();
+  const submenu = useSelector<T>((store) => store.submenu);
 
+  // set homepage varaibles
   useEffect(() => {
-    // set homepage varaibles
     dispatch(unknownPage());
   }, []);
+
+  // close sub menu on mouse leave menu
+  const onMouseEnter = () => {
+    if (submenu) {
+      dispatch(closeSubmenu());
+    }
+  };
+  
   return (
-    <div className='flex items-center justify-center w-screen h-screen'>
+    <div onMouseEnter={onMouseEnter} className='flex items-center justify-center w-screen h-screen'>
       <div className='px-4 lg:py-12'>
         <div className='lg:gap-4 lg:flex'>
           <div className='flex flex-col items-center justify-center md:py-24 lg:py-32'>

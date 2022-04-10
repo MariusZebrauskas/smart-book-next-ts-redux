@@ -5,15 +5,18 @@ import { FcMindMap } from 'react-icons/fc';
 import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
 import { closeMenu, openMenu } from '../redux/menuRedux';
 import { calendarPage, contactPage, homePage, todoPage } from '../redux/pageReducer';
-import Avatar from '../components/Avatar';
+import Avatar from './Avatar';
 import { User } from '../redux/userReducer';
+import LogoIcon from './LogoIcon';
+import LogoText from './LogoText';
+
 interface T extends DefaultRootState {
   menu: boolean;
   submenu: boolean;
   page: string;
   user: null | User;
 }
-export const Nav = () => {
+const Nav = () => {
   // redux states
   const menu = useSelector<T>((store) => store.menu);
   const page = useSelector<T>((store) => store.page);
@@ -32,7 +35,7 @@ export const Nav = () => {
     }
   };
 
-// animation logic (open close mobile menu)
+  // animation logic (open close mobile menu)
   useEffect(() => {
     if (!subMmenu) {
       gsap.fromTo(
@@ -60,7 +63,7 @@ export const Nav = () => {
         { zIndex: 5, duration: 0.3 }
       );
     }
-  },[subMmenu]);
+  }, [subMmenu]);
 
   const changePageMenuBackground = (params: string) => {
     //   change background to dark on page select
@@ -127,10 +130,8 @@ export const Nav = () => {
           </div>
           <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
             <div className='flex-shrink-0 flex items-center'>
-              <FcMindMap className='block  h-8 w-auto mr-2 ' />
-              <h4 className='font-extrabold logo  tracking-wider text-xl font-mono text-white'>
-                SmartBook
-              </h4>
+              <LogoIcon />
+              <LogoText />
             </div>
             <div className='hidden sm:block sm:ml-6'>
               <div className='flex space-x-4'>
@@ -261,3 +262,5 @@ export const Nav = () => {
     </nav>
   );
 };
+
+export default Nav;

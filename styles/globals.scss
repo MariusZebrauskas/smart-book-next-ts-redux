@@ -17,5 +17,15 @@
   display: none;
   background: #1f2937;
   z-index: -1;
+}
+.imageForDashboard {
+  // margin top
+  margin-top: 2rem;
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
   
 }
