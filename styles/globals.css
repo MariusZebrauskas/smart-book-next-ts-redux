@@ -8,15 +8,12 @@
 }
 
 .submenuGSAP {
-  -webkit-transform: translateY(0.5rem);
-          transform: translateY(0.5rem);
+  -webkit-transform: translateY(-15rem);
+          transform: translateY(-15rem);
   position: absolute;
   width: 100%;
   display: none;
   background: #1f2937;
-}
-
-.submenuGSAP a:hover {
-  background: #374151;
+  z-index: -1;
 }
 /*# sourceMappingURL=globals.css.map */

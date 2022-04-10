@@ -11,28 +11,36 @@ type Calendar = {
 type Contact = {
   type: string;
 };
+type unknownPage = {
+  type: string;
+};
 
-type Actions = Home | Todo | Calendar | Contact;
+type Actions = Home | Todo | Calendar | Contact | unknownPage;
 // action
 
-export const home = () => {
+export const homePage = () => {
   return {
     type: 'home',
   };
 };
-export const todo = () => {
+export const todoPage = () => {
   return {
     type: 'todo',
   };
 };
-export const calendar = () => {
+export const calendarPage = () => {
   return {
     type: 'calendar',
   };
 };
-export const contact = () => {
+export const contactPage = () => {
   return {
     type: 'contact',
+  };
+};
+export const unknownPage = () => {
+  return {
+    type: 'unknown',
   };
 };
 
@@ -48,6 +56,8 @@ export const pageReducer = (state = 'home', action: Actions) => {
       return (state = 'calendar');
     case 'contact':
       return (state = 'contact');
+    case 'unknown':
+      return (state = 'unknown');
     default:
       return state;
   }

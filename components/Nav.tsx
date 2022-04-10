@@ -4,7 +4,7 @@ import React from 'react';
 import { FcMindMap } from 'react-icons/fc';
 import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
 import { closeMenu, openMenu } from '../redux/menuRedux';
-import { calendar, contact, home, todo } from '../redux/pageReducer';
+import { calendarPage, contactPage, homePage, todoPage } from '../redux/pageReducer';
 interface T extends DefaultRootState {
   menu: boolean;
   submenu: boolean;
@@ -34,10 +34,31 @@ export const Nav = () => {
   const burger = () => {
     //   open close sub menu
     if (subMmenu) {
-      gsap.to('.submenuGSAP', { y: 8, duration: 0.2, opacity: 0, display: 'none' });
+      gsap.fromTo(
+        '.submenuGSAP',
+        {
+          zIndex: -1,
+        },
+        {
+          y: '-15rem',
+          duration: 0.2,
+          opacity: 0,
+          display: 'none',
+          zIndex: -1,
+        }
+      );
       return dispatch(closeMenu());
     } else if (!subMmenu) {
-      gsap.to('.submenuGSAP', { y: 0, duration: 0.3, opacity: 1, display: 'block' });
+      gsap.fromTo(
+        '.submenuGSAP',
+        {
+          y: 0,
+          opacity: 1,
+          display: 'block',
+          zIndex: -1,
+        },
+        { zIndex: 5, duration: 0.3 }
+      );
       return dispatch(openMenu());
     }
   };
@@ -45,19 +66,19 @@ export const Nav = () => {
   const changePageMenuBackground = (params: string) => {
     //   change background to dark on page select
     if (params === 'home') {
-      return dispatch(home());
+      return dispatch(homePage());
     } else if (params === 'todo') {
-      return dispatch(todo());
+      return dispatch(todoPage());
     } else if (params === 'calendar') {
-      return dispatch(calendar());
+      return dispatch(calendarPage());
     } else if (params === 'contact') {
-      return dispatch(contact());
+      return dispatch(contactPage());
     }
   };
 
   return (
-    <nav className='bg-gray-800'>
-      <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
+    <nav className='bg-gray-800 '>
+      <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 '>
         <div className='relative flex items-center justify-between h-16'>
           <div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
             <button
@@ -127,28 +148,31 @@ export const Nav = () => {
                     Home
                   </a>
                 </Link>
+                <Link href='/todo'>
+                  <a
+                    onClick={() => changePageMenuBackground('todo')}
+                    className={
+                      page === 'todo'
+                        ? 'bg-gray-900 text-white  px-3 py-2 rounded-md text-sm font-medium'
+                        : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
+                    }
+                  >
+                    Todo
+                  </a>
+                </Link>
 
-                <a
-                  onClick={() => changePageMenuBackground('todo')}
-                  className={
-                    page === 'todo'
-                      ? 'bg-gray-900 text-white  px-3 py-2 rounded-md text-sm font-medium'
-                      : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
-                  }
-                >
-                  Todo
-                </a>
-
-                <a
-                  onClick={() => changePageMenuBackground('calendar')}
-                  className={
-                    page === 'calendar'
-                      ? 'bg-gray-900 text-white  px-3 py-2 rounded-md text-sm font-medium'
-                      : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
-                  }
-                >
-                  Calendar
-                </a>
+                <Link href='/calendar'>
+                  <a
+                    onClick={() => changePageMenuBackground('calendar')}
+                    className={
+                      page === 'calendar'
+                        ? 'bg-gray-900 text-white  px-3 py-2 rounded-md text-sm font-medium'
+                        : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
+                    }
+                  >
+                    Calendar
+                  </a>
+                </Link>
                 <Link href='/contact'>
                   <a
                     onClick={() => changePageMenuBackground('contact')}
@@ -251,22 +275,46 @@ export const Nav = () => {
         <div className='submenuGSAP px-2 pt-2 pb-3 space-y-1'>
           <Link href='/'>
             <a
-              className=' text-white block px-3 py-2 rounded-md text-base font-medium'
+              className={
+                page === 'home'
+                  ? 'text-white block px-3 py-2 rounded-md text-base font-medium  '
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
+              }
               aria-current='page'
             >
               Home
             </a>
           </Link>
-
-          <a className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'>
-            Todo
-          </a>
-
-          <a className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'>
-            Calendar
-          </a>
+          <Link href='/todo'>
+            <a
+              className={
+                page === 'todo'
+                  ? 'text-white block px-3 py-2 rounded-md text-base font-medium'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
+              }
+            >
+              Todo
+            </a>
+          </Link>
+          <Link href='/calendar'>
+            <a
+              className={
+                page === 'calendar'
+                  ? 'text-white block px-3 py-2 rounded-md text-base font-medium'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
+              }
+            >
+              Calendar
+            </a>
+          </Link>
           <Link href='/contact'>
-            <a className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'>
+            <a
+              className={
+                page === 'contact'
+                  ? 'text-white block px-3 py-2 rounded-md text-base font-medium'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
+              }
+            >
               Contact
             </a>
           </Link>
