@@ -1,8 +1,34 @@
 import React from 'react';
+import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
+import { closeSubmenu } from '../redux/submenuReducer';
 
+interface T extends DefaultRootState {
+  submenu: boolean;
+}
 const register = () => {
+
+
+
+
+  
+    const submenu = useSelector<T>((store) => store.submenu);
+  
+    const dispach = useDispatch();
+  
+    // close menu if click out of menu
+    const onMouseEnter = () => {
+      if (submenu) {
+        dispach(closeSubmenu());
+      }
+    };
+
+
+
+
+
+
   return (
-    <section className='max-w-4xl mt-20 mb-40 p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800'>
+    <section onMouseEnter={onMouseEnter} className='max-w-4xl mt-20 mb-40 p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800'>
       <h2 className='text-lg font-semibold text-gray-700 capitalize dark:text-white'>
         Account settings
       </h2>

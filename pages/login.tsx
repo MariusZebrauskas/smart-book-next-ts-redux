@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
 import { unknownPage } from '../redux/pageReducer';
+import { closeSubmenu } from '../redux/submenuReducer';
 
 
 interface T extends DefaultRootState {
@@ -18,10 +19,16 @@ const login = () => {
     dispatch(unknownPage());
   }, []);
 
+  // close menu if click out of menu
+  const onMouseEnter = () => {
+    if (submenu) {
+      dispatch(closeSubmenu());
+    }
+  };
 
 
   return (
-    <section className='max-w-md mt-20 p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800'>
+    <section onMouseEnter={onMouseEnter} className='max-w-md mt-20 p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800'>
       <h2 className='text-lg font-semibold text-gray-700 capitalize dark:text-white'>
         Account Login
       </h2>

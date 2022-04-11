@@ -224,7 +224,7 @@ const Nav = () => {
               Home
             </a>
           </Link>
-          <Link href='/todo'>
+          <Link href='dashboard/todo'>
             <a
               className={
                 page === 'todo'
