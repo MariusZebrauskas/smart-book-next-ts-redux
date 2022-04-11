@@ -1,7 +1,25 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
+import { unknownPage } from '../redux/pageReducer';
+
+
+interface T extends DefaultRootState {
+  submenu: boolean;
+}
 
 const login = () => {
+  // redux variables
+  const dispatch = useDispatch();
+  const submenu = useSelector<T>((store) => store.submenu);
+
+  // set homepage varaibles
+  useEffect(() => {
+    dispatch(unknownPage());
+  }, []);
+
+
+
   return (
     <section className='max-w-md mt-20 p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800'>
       <h2 className='text-lg font-semibold text-gray-700 capitalize dark:text-white'>
@@ -11,7 +29,7 @@ const login = () => {
       <form>
         <div className='grid grid-cols-1 gap-6 mt-4 sm:grid-cols-1'>
           <div>
-            <label className='text-gray-700 dark:text-gray-200' for='emailAddress'>
+            <label className='text-gray-700 dark:text-gray-200' >
               Email Address
             </label>
             <input
@@ -22,7 +40,7 @@ const login = () => {
           </div>
 
           <div>
-            <label className='text-gray-700 dark:text-gray-200' for='password'>
+            <label className='text-gray-700 dark:text-gray-200' >
               Password
             </label>
             <input
@@ -43,7 +61,7 @@ const login = () => {
         <div className='flex justify-start mt-6'>
           <p>Dont have an account ? </p>
           <Link href='/register'>
-            <a class='hover:underline text-cyan-600 ml-2'>Register</a>
+            <a className='hover:underline text-cyan-600 ml-2'>Register</a>
           </Link>
         </div>
       </form>

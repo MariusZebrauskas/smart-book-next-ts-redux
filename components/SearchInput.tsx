@@ -3,7 +3,7 @@ import React from 'react';
 const SearchInput = () => {
   return (
     <div className='flex justify-center mt-20 w-full '>
-      <div className='mb-3 xl:w-96  w-full'>
+      <div className='mb-3 lg:w-2/4 w-4/5 '>
         <div className='relative flex  items-stretch w-full mb-4 rounded '>
           <input
             type='search'

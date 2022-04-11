@@ -14,7 +14,7 @@ type Card = {
 
 const DynamicCards: React.FC<Card> = ({ card }) => {
   return (
-    <Link href={card.page}>
+    <Link key={card.id} href={card.page}>
       <div
         className='max-w-xs mx-auto overflow-hidden bg-gray-200 rounded-lg shadow-lg dark:bg-gray-800
       hover:cursor-pointer
