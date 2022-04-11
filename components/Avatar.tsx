@@ -3,11 +3,13 @@ import React from 'react';
 import { useDispatch, useSelector, DefaultRootState } from 'react-redux';
 import { closeMenu, openMenu } from '../redux/menuRedux';
 
-
+interface T extends DefaultRootState {
+  menu: string;
+}
 
 const Avatar = () => {
   const dispatch = useDispatch();
-  const menu = useSelector((store) => store.menu);
+  const menu = useSelector<T>((store) => store.menu);
 
   const avatar = () => {
     //   avatar animation
