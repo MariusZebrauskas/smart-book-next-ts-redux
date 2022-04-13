@@ -148,7 +148,7 @@ const Nav = () => {
                     Home
                   </a>
                 </Link>
-                <Link href='dashboard/todo'>
+                <Link href="/dashboard/todo">
                   <a
                     onClick={() => changePageMenuBackground('todo')}
                     className={
@@ -161,7 +161,7 @@ const Nav = () => {
                   </a>
                 </Link>
 
-                <Link href='/calendar'>
+                <Link href='/dashboard/calendar'>
                   <a
                     onClick={() => changePageMenuBackground('calendar')}
                     className={
@@ -224,7 +224,7 @@ const Nav = () => {
               Home
             </a>
           </Link>
-          <Link href='dashboard/todo'>
+          <Link href='/dashboard/todo'>
             <a
               className={
                 page === 'todo'
@@ -235,7 +235,7 @@ const Nav = () => {
               Todo
             </a>
           </Link>
-          <Link href='/calendar'>
+          <Link href='/dashboard/calendar'>
             <a
               className={
                 page === 'calendar'

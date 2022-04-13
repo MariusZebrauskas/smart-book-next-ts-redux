@@ -16,9 +16,12 @@ type Types = {
       type: 'close',
     };
   };
+
+
+  
   
   // reducer
-  // mobile menu
+
   
   export const submenuReducer = (state = false, action: Types) => {
     switch (action.type) {
