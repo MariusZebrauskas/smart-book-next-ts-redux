@@ -161,7 +161,7 @@ const Nav = () => {
                   </a>
                 </Link>
 
-                <Link href='/dashboard/calendar'>
+                <Link href='/dashboard/routine'>
                   <a
                     onClick={() => changePageMenuBackground('calendar')}
                     className={
@@ -170,7 +170,7 @@ const Nav = () => {
                         : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
                     }
                   >
-                    Calendar
+                    Routine
                   </a>
                 </Link>
                 <Link href='/contact'>
@@ -235,7 +235,7 @@ const Nav = () => {
               Todo
             </a>
           </Link>
-          <Link href='/dashboard/calendar'>
+          <Link href='/dashboard/routine'>
             <a
               className={
                 page === 'calendar'
@@ -243,7 +243,7 @@ const Nav = () => {
                   : 'text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
               }
             >
-              Calendar
+              Routine
             </a>
           </Link>
           <Link href='/contact'>
