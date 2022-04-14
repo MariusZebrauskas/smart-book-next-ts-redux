@@ -1,9 +1,65 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
 import Day from '../../components/Day';
+import PopUpdate from '../../components/PopUpdate';
 import RoutineHeader from '../../components/RoutineHeader';
 import { sevenDays } from '../../objects/sevendays';
+import { getDataForSevenDays, updateDataForSevenDays } from '../../redux/sevenDaysReducer';
 
+interface T extends DefaultRootState {
+  sevenDays: {
+    time: string;
+    id: number;
+    monday: {
+      id: number;
+      message: string;
+      day: string;
+      parenTime: string;
+    }[];
+  };
+}
 const routine = () => {
+  // redux
+  const dispatch = useDispatch();
+  const days: any = useSelector<T>((state) => state.sevenDays);
+
+  // state to pop up screen
+  const [openPopUp, setOpenPopUp] = useState(false);
+
+  const [dataToUpdate, setDataToUpdate] = useState<any>(null);
+
+  const popUpWindow = (params: string, dataFromScreen: any) => {
+    if (params === 'pop') {
+      setDataToUpdate(dataFromScreen);
+      return setOpenPopUp(true);
+    } else if (params === 'cancel') {
+      return setOpenPopUp(false);
+    } else if (params === 'submit') {
+      // day in object
+      let dayObj = dataToUpdate.day.toLowerCase();
+      // index in object
+      let index: any = days.findIndex((oneDay: any) => {
+        return oneDay[dayObj].id === dataToUpdate.id;
+      });
+      // message to update
+      let message = dataToUpdate.message;
+
+      // final obj
+      let update = {
+        index: index,
+        day: dayObj,
+        message: message,
+      };
+
+      dispatch(updateDataForSevenDays(update));
+    }
+  };
+  // on page load
+  useEffect(() => {
+    if (sevenDays) {
+      dispatch(getDataForSevenDays(sevenDays));
+    }
+  }, []);
   return (
     <>
       <RoutineHeader />
@@ -65,15 +121,23 @@ const routine = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {sevenDays.map((day: any) => {
-                    return <Day key={day.id} day={day} />;
-                  })}
+                  {days &&
+                    days.map((day: any) => {
+                      return <Day popUpWindow={popUpWindow} key={Math.random()} day={day} />;
+                    })}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
+      {openPopUp ? (
+        <PopUpdate
+          setDataToUpdate={setDataToUpdate}
+          dataToUpdate={dataToUpdate}
+          popUpWindow={popUpWindow}
+        />
+      ) : null}
     </>
   );
 };
