@@ -16,7 +16,7 @@ const IndexPage = () => {
   const submenu = useSelector<T>((store) => store.submenu);
 
   useEffect(() => {
-    console.log('page loaded');
+  
 
     // set homepage varaibles
     dispatch(homePage());

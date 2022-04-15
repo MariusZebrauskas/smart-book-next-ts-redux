@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { FcMindMap } from 'react-icons/fc';
 import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
 import { closeMenu, openMenu } from '../redux/menuRedux';
-import { calendarPage, contactPage, homePage, todoPage } from '../redux/pageReducer';
+import { calendarPage, contactPage, dashboardPage, homePage, todoPage } from '../redux/pageReducer';
 import Avatar from './Avatar';
 import { User } from '../redux/userReducer';
 import LogoIcon from './LogoIcon';
@@ -75,8 +75,11 @@ const Nav = () => {
       return dispatch(calendarPage());
     } else if (params === 'contact') {
       return dispatch(contactPage());
+    } else if (params === 'dashboard') {
+      return dispatch(dashboardPage());
     }
   };
+                        console.log('page:', page)
 
   return (
     <nav className='bg-gray-800 '>
@@ -148,31 +151,20 @@ const Nav = () => {
                     Home
                   </a>
                 </Link>
-                <Link href="/dashboard/todo">
+                <Link href="/dashboard">
                   <a
-                    onClick={() => changePageMenuBackground('todo')}
+                    onClick={() => changePageMenuBackground('dashboard')}
                     className={
-                      page === 'todo'
+                      page === 'dashboard'
                         ? 'bg-gray-900 text-white  px-3 py-2 rounded-md text-sm font-medium'
                         : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
                     }
                   >
-                    Todo
+                    Dashboard
                   </a>
                 </Link>
 
-                <Link href='/dashboard/routine'>
-                  <a
-                    onClick={() => changePageMenuBackground('calendar')}
-                    className={
-                      page === 'calendar'
-                        ? 'bg-gray-900 text-white  px-3 py-2 rounded-md text-sm font-medium'
-                        : ' text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
-                    }
-                  >
-                    Routine
-                  </a>
-                </Link>
+                
                 <Link href='/contact'>
                   <a
                     onClick={() => changePageMenuBackground('contact')}
@@ -224,28 +216,18 @@ const Nav = () => {
               Home
             </a>
           </Link>
-          <Link href='/dashboard/todo'>
+          <Link href='/dashboard'>
             <a
               className={
-                page === 'todo'
+                page === 'dashboard'
                   ? 'text-white block px-3 py-2 rounded-md text-base font-medium'
                   : 'text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
               }
             >
-              Todo
+              Dashboard
             </a>
           </Link>
-          <Link href='/dashboard/routine'>
-            <a
-              className={
-                page === 'calendar'
-                  ? 'text-white block px-3 py-2 rounded-md text-base font-medium'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
-              }
-            >
-              Routine
-            </a>
-          </Link>
+         
           <Link href='/contact'>
             <a
               className={

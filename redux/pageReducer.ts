@@ -38,6 +38,11 @@ export const contactPage = () => {
     type: 'contact',
   };
 };
+export const dashboardPage = () => {
+  return {
+    type: 'dashboard',
+  };
+};
 export const unknownPage = () => {
   return {
     type: 'unknown',
@@ -58,6 +63,8 @@ export const pageReducer = (state = 'home', action: Actions) => {
       return (state = 'contact');
     case 'unknown':
       return (state = 'unknown');
+    case 'dashboard':
+      return (state = 'dashboard');
     default:
       return state;
   }
