@@ -17,7 +17,7 @@ export const updateDataForSevenDays = (update: any) => {
 
 // reducers
 
-export const sevenDaysReducer = (state = [], action: any) => {
+export const sevenDaysReducer = (state: any = [], action: any) => {
   switch (action.type) {
     case 'getDataForSevenDays':
       // get Data data to reducer
@@ -27,11 +27,10 @@ export const sevenDaysReducer = (state = [], action: any) => {
     case 'updateDataForSevenDays':
       // get Data data to reducer
       let settings = action.payload;
-
+      // update data
       state[settings.index][settings.day].message = settings.message;
-
+      // save data
       return [...state];
-
     //   return state;
     default:
       return state;
