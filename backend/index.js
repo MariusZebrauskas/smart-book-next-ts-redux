@@ -5,6 +5,7 @@ const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const register = require('./routes/register');
+const login = require('./routes/login');
 
 const app = express();
 
@@ -15,8 +16,9 @@ app.use(express.json());
 
 // routes
 app.use("/api", register);
+app.use("/api", login);
 
-
+//FIXME: make encrypted data
 
 // db connect
 mongoose
