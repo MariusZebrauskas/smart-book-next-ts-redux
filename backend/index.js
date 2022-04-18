@@ -7,18 +7,28 @@ const mongoose = require('mongoose');
 const register = require('./routes/register');
 const login = require('./routes/login');
 const privatetodo = require('./routes/todo');
+const cors = require('cors');
 
 const app = express();
 
 // Midlewere
 
+app.use(
+  cors({
+    origin: '*',
+  })
+);
 app.use(express.json());
-
+// request loger Midlewere
+app.use((req, res, next) => {
+  console.log('Request ip : ' + req.url);
+  next();
+});
 
 // route Midleweres
-app.use("/api", register);
-app.use("/api", login);
-app.use("/api", privatetodo);
+app.use('/api', register);
+app.use('/api', login);
+app.use('/api', privatetodo);
 
 //FIXME: make encrypted data
 

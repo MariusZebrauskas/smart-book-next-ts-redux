@@ -13,7 +13,7 @@ const { registerValidation } = require('../validation');
 //   password: Joi.string().min(6).required(),
 // });
 
-router.get('/register', async (req, res) => {
+router.post('/register', async (req, res) => {
   // unhashed password
   const myPlaintextPassword = req.body.password;
 
@@ -54,7 +54,6 @@ router.get('/register', async (req, res) => {
   } catch (err) {
     res.status(400).send(err);
   }
-
 });
 
 module.exports = router;
