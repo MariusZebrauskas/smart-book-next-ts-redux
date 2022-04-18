@@ -6,17 +6,19 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const register = require('./routes/register');
 const login = require('./routes/login');
+const privatetodo = require('./routes/todo');
 
 const app = express();
 
-// midlewere
+// Midlewere
 
 app.use(express.json());
 
 
-// routes
+// route Midleweres
 app.use("/api", register);
 app.use("/api", login);
+app.use("/api", privatetodo);
 
 //FIXME: make encrypted data
 

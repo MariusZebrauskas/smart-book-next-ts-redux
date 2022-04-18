@@ -2,6 +2,8 @@ const express = require('express');
 let router = express.Router();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const { loginValidation } = require('../validation');
+const jwt = require('jsonwebtoken');
 const saltRounds = 10;
 
 // FIXME:vadidate inputs uaserName, email, password;
@@ -9,9 +11,12 @@ const saltRounds = 10;
 router.post('/login', (req, res) => {
   // unhashed password
   const myPlaintextPassword = req.body.password;
+  //   Validation
+  const { error } = loginValidation(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
 
   //   chek DB for same email!
-  User.findOne({ email: req.body.email }, (err, userFromDb) => {
+  const chekEmailInDB = User.findOne({ email: req.body.email }, (err, userFromDb) => {
     if (!userFromDb) {
       return res
         .status(200)
@@ -25,8 +30,14 @@ router.post('/login', (req, res) => {
 
       bcrypt.compare(myPlaintextPassword, hash, function (err, result) {
         if (result) {
-          // is password  is correct login
-          return res.status(200).json({ success: true, message: 'you are logged in', user });
+          // if password  is correct before login
+          // create JTW token, and asign it to user
+
+          const token = jwt.sign(user, process.env.TOKEN_SECRET);
+          return res
+            .status(200)
+            .header('auth-token', token)
+            .json({ user, token, message: 'you are logged in', success: true });
         } else {
           // if password is incorect return unauthorized
           return res
