@@ -42,5 +42,6 @@ mongoose
     });
   })
   .catch((err) => {
+    console.log('no internet or... : ');
     console.log('mongo error', err);
   });

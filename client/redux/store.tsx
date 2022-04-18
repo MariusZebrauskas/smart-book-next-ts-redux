@@ -5,6 +5,7 @@ import { sevenDaysReducer } from './sevenDaysReducer';
 import { submenuReducer } from './submenuReducer';
 import { todosReducer } from './todoReducer';
 import { userReducer } from './userReducer';
+import { spinnerReducer } from './loadingReducer';
 
 // combine reducers
 
@@ -15,6 +16,7 @@ const reducers = combineReducers({
   page: pageReducer,
   todo: todosReducer,
   sevenDays: sevenDaysReducer,
+  loading: spinnerReducer,
 });
 
 // store

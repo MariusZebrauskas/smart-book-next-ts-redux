@@ -5,13 +5,6 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const { registerValidation } = require('../validation');
 
-// VALIDATION
-// const Joi = require('joi');
-// const schema = Joi.object({
-//   userName: Joi.string().min(3).required(),
-//   email: Joi.string().max(255).required().email(),
-//   password: Joi.string().min(6).required(),
-// });
 
 router.post('/register', async (req, res) => {
   // unhashed password
@@ -20,12 +13,12 @@ router.post('/register', async (req, res) => {
   // VALIDATING DATA
 
   const { error } = registerValidation(req.body);
-  if (error) return res.status(400).send({ error: error.details[0].message });
+  if (error) return res.status(400).json({ error: "Data invalid" });
 
   //   CHECK DB FOR SAME EMAIL!
   const emailExist = await User.findOne({ email: req.body.email });
   if (emailExist)
-    return res.status(200).json({ message: 'sorry email is allready in use', userExists: true });
+    return res.status(200).json({ message: 'Sorry email is allready in use', userExists: true });
 
   try {
     //   1.use bcrypt function to bcrypt password
@@ -44,7 +37,7 @@ router.post('/register', async (req, res) => {
         user
           .save()
           .then((results) => {
-            res.status(200).json(results);
+            res.status(200).json({ message: 'Account has been created successfully', userExists: false });
           })
           .catch((err) => {
             res.status(404).json({ error: err });

@@ -4,13 +4,26 @@ import { closeSubmenu } from '../redux/submenuReducer';
 import * as EmailValidator from 'email-validator';
 import Error from '../components/Error';
 import axios from 'axios';
+import { HTTP } from '../config';
+import Success from '../components/Success';
+import Spinner from '../components/Spinner';
+import { lodingOFF, lodingON } from '../redux/loadingReducer';
+import { useRouter } from 'next/router';
 
 interface T extends DefaultRootState {
   submenu: boolean;
+  loading: boolean;
 }
+
+// const HTTP = "http://localhost:5000";
+
 const register = () => {
   const submenu = useSelector<T>((store) => store.submenu);
+  const loading = useSelector<T>((store) => store.loading);
   const dispach = useDispatch();
+
+  // router
+  const router = useRouter();
 
   // register data
   const [userRegisterData, setUserRegisterData] = useState({
@@ -21,6 +34,7 @@ const register = () => {
   });
 
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   // close menu if click out of menu
   const onMouseEnter = () => {
@@ -40,6 +54,7 @@ const register = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
 
     // email validation
     let emailIsValidated = EmailValidator.validate(userRegisterData.email);
@@ -49,15 +64,42 @@ const register = () => {
       return setError('Passwords do not match');
 
     // if everithing is valid
-    // FIXME: PROXY not working
+    dispach(lodingON());
+
     axios
-      .post('api/register', {
+      .post(`${HTTP()}/api/register`, {
         userName: userRegisterData.userName,
         email: userRegisterData.email,
         password: userRegisterData.password,
       })
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
+      .then((response) => {
+        dispach(lodingOFF());
+
+        let userExist = response.data.userExists;
+        // if email is taken
+        if (userExist) return setError(response.data.message);
+
+        // if account been created
+        // clean fields
+        setUserRegisterData({
+          userName: '',
+          email: '',
+          password: '',
+          passwordConfirm: '',
+        });
+
+        // success message
+        setSuccess(response.data.message);
+        setTimeout(() => {
+          router.push('/login');
+        }, 2000);
+      })
+      .catch((err) => {
+        // set error on screen
+        setError('Backend Message: Data invalid');
+        // turn off spinner
+        return dispach(lodingOFF());
+      });
   };
 
   return (
@@ -97,6 +139,7 @@ const register = () => {
           <div>
             <label className='text-gray-700 dark:text-gray-200'>Password</label>
             <input
+              value={userRegisterData.password}
               onChange={(e) => onChange(e, 'password')}
               minLength={6}
               id='password'
@@ -108,6 +151,7 @@ const register = () => {
           <div>
             <label className='text-gray-700 dark:text-gray-200'>Password Confirmation</label>
             <input
+              value={userRegisterData.passwordConfirm}
               onChange={(e) => onChange(e, 'passwordConfirm')}
               minLength={6}
               id='passwordConfirmation'
@@ -122,11 +166,13 @@ const register = () => {
             type='submit'
             className='px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600'
           >
+            {loading && <Spinner />}
             Save
           </button>
         </div>
       </form>
       {error && <Error setError={setError} error={error} />}
+      {success && <Success success={success} />}
     </section>
   );
 };
