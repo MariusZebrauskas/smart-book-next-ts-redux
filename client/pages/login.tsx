@@ -51,11 +51,9 @@ const login = () => {
     axios
       .post(`${HTTP()}/api/login`, inputs)
       .then((response: any) => {
-        console.log(response);
         let { token } = response.data;
         sessionStorage.setItem('token', token);
         dispatch(userLogin(response.data.user));
-        console.log('response.data.user:', response.data.user);
       })
       .catch((error) => {
         console.log(error);

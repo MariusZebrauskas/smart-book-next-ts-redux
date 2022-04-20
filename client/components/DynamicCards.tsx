@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import React from 'react';
-
+import React, { useEffect } from 'react';
+import { DefaultRootState, useSelector } from 'react-redux';
+import { tokenValidation } from '../validation/tokenValidation';
 
 type Card = {
   card: {
@@ -9,12 +10,30 @@ type Card = {
     image: string;
     alt: string;
     page: string;
-  }
+  };
+};
+
+interface T extends DefaultRootState {
+  user: null | any;
 }
 
 const DynamicCards: React.FC<Card> = ({ card }) => {
+  const user:any = useSelector<T>((state) => state.user);
+
+  useEffect(() => {
+    if (user) {
+
+      tokenValidation(sessionStorage.getItem('token'), user.email);
+    }
+  }, [user]);
+
+  // FIXME: todo + calendar json toekn verify  + functionality to add delete update !!!! DB
+  // FIXME: todo + calendar json toekn verify  + functionality to add delete update !!!! DB
+  // FIXME: todo + calendar json toekn verify  + functionality to add delete update !!!! DB
+  // FIXME: todo + calendar json toekn verify  + functionality to add delete update !!!! DB
+
   return (
-    <Link key={card.id} href={card.page}>
+    <Link key={card.id} href={user ? card.page : '/login'}>
       <div
         className='max-w-xs mx-auto overflow-hidden bg-gray-200 rounded-lg shadow-lg dark:bg-gray-800
       hover:cursor-pointer
