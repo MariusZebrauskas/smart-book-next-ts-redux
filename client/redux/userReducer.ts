@@ -1,5 +1,3 @@
-
-
 // types
 
 export type User = {
@@ -43,7 +41,7 @@ export const userReducer = (state: null | User = null, action: AllActions) => {
     case 'login':
       return (state = action.payload);
     case 'logout':
-      return (state = action.payload);
+      return (state = null);
     default:
       return state;
   }

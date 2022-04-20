@@ -26,14 +26,14 @@ router.post('/login', (req, res) => {
       /* user data */
       let hash = userFromDb.password;
       const { _id, userName, email } = userFromDb;
-      const user = { _id, userName, email };
+      const user = { userName, email };
 
       bcrypt.compare(myPlaintextPassword, hash, function (err, result) {
         if (result) {
           // if password  is correct before login
           // create JTW token, and asign it to user
 
-          const token = jwt.sign(user, process.env.TOKEN_SECRET);
+          const token = jwt.sign({ _id: _id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
           return res
             .status(200)
             .header('auth-token', token)
