@@ -1,10 +1,11 @@
 const express = require('express');
 let router = express.Router();
 const User = require('../models/user');
+const TodoList = require('../models/todo');
+const Routine = require('../models/routine');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const { registerValidation } = require('../validation');
-
 
 router.post('/register', async (req, res) => {
   // unhashed password
@@ -13,7 +14,7 @@ router.post('/register', async (req, res) => {
   // VALIDATING DATA
 
   const { error } = registerValidation(req.body);
-  if (error) return res.status(400).json({ error: "Data invalid" });
+  if (error) return res.status(400).json({ error: 'Data invalid' });
 
   //   CHECK DB FOR SAME EMAIL!
   const emailExist = await User.findOne({ email: req.body.email });
@@ -37,7 +38,23 @@ router.post('/register', async (req, res) => {
         user
           .save()
           .then((results) => {
-            res.status(200).json({ message: 'Account has been created successfully', userExists: false });
+            // create todo list
+            const todoList = new TodoList({
+              _id: results._id,
+            });
+
+            todoList.save();
+            // create routine list
+            const routine = new Routine({
+              _id: results._id,
+            });
+
+            routine.save();
+
+
+            res
+              .status(200)
+              .json({ message: 'Account has been created successfully', userExists: false });
           })
           .catch((err) => {
             res.status(404).json({ error: err });

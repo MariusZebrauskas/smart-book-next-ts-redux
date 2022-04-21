@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import React, { useEffect } from 'react';
-import { DefaultRootState, useSelector } from 'react-redux';
-import { tokenValidation } from '../validation/tokenValidation';
+import React from 'react';
+import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
+
+
 
 type Card = {
   card: {
@@ -18,14 +19,11 @@ interface T extends DefaultRootState {
 }
 
 const DynamicCards: React.FC<Card> = ({ card }) => {
-  const user:any = useSelector<T>((state) => state.user);
+  const user: any = useSelector<T>((state) => state.user);
+  const dispach = useDispatch();
+ 
 
-  useEffect(() => {
-    if (user) {
 
-      tokenValidation(sessionStorage.getItem('token'), user.email);
-    }
-  }, [user]);
 
   // FIXME: todo + calendar json toekn verify  + functionality to add delete update !!!! DB
   // FIXME: todo + calendar json toekn verify  + functionality to add delete update !!!! DB

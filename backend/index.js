@@ -6,7 +6,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const register = require('./routes/register');
 const login = require('./routes/login');
-const clientVerify = require('./routes/token-verify-client');
+const routine = require('./routes/routine');
 const privatetodo = require('./routes/todo');
 const cors = require('cors');
 
@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 app.use('/api', register);
 app.use('/api', login);
 app.use('/api', privatetodo);
-app.use('/api', clientVerify);
+app.use('/api', routine);
 
 //FIXME: make encrypted data
 
