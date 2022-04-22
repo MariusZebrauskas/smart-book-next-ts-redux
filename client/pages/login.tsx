@@ -51,6 +51,10 @@ const login = () => {
     axios
       .post(`${HTTP()}/api/login`, inputs)
       .then((response: any) => {
+        if (response.data.login === false) {
+          // FIXME: login loading + errors
+          return console.log(response.data.message)
+        }
         let { token } = response.data;
         sessionStorage.setItem('token', token);
         dispatch(userLogin(response.data.user));

@@ -1,5 +1,6 @@
 // types
 
+
 // export type FetchTodos = {
 //   type?: string;
 //   payload: {
@@ -36,7 +37,7 @@ export const addNewTodo = (newTodo: any) => {
   };
 };
 
-export const delteTask = (text: string) => {
+export const delteTask = (text: any) => {
   return {
     type: 'delteTask',
     payload: text,
@@ -66,9 +67,8 @@ export const todosReducer = (state: any = [], action:any) => {
       const { newTodo } = action.payload;
       return [...state, newTodo];
     case 'delteTask':
-      let x: string = action.payload;
-      console.log('x from redux:', x)
-      return state.filter((list: any) => list.text !== x);
+      let x = action.payload;
+      return state.filter((list: any) => list !== x);
     case 'popUpEdite':
       // get array id number
       let id = action.payload;

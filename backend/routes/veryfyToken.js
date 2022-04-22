@@ -4,6 +4,8 @@ const auth = async (req, res, next) => {
   // console.log('req:', req.body.token)
 
   const token = req.body.token
+
+  
  
   if (!token) return res.status(401).send('Access Denied');
 

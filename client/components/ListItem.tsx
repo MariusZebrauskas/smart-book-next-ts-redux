@@ -4,8 +4,9 @@ import { PropsTypes } from '../pages/dashboard/todo';
 import { delteTask, popUpEdite } from '../redux/todoReducer';
 import Popup from './Popup';
 
-const ListItem = ({ todo }: PropsTypes) => {
+const ListItem = ({ todo }: any) => {
   const todoList: any = useSelector<any>((store) => store.todo);
+  console.log('todoList:', todoList)
   const dispatch = useDispatch();
 
   let getIndex = todoList.findIndex((item: any) => {
@@ -41,7 +42,8 @@ const ListItem = ({ todo }: PropsTypes) => {
       {todoList[itemId].edite === false &&  <span
         className=' cursor-pointer px-2.5 py-2 text-base flex justify-center items-center  '
         style={{ color: '#111827' }}
-        onClick={() => deleteTodo(todo.text)}
+        // onClick={() => deleteTodo(todo.text)}
+        onClick={() => deleteTodo(todo)}
       >
         X
       </span>}

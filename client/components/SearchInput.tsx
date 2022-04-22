@@ -1,5 +1,7 @@
-import React, { useRef } from 'react';
+import axios from 'axios';
+import React, { useRef, useState } from 'react';
 import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
+import { HTTP } from '../config';
 import { addNewTodo } from '../redux/todoReducer';
 
 interface T extends DefaultRootState {
@@ -13,6 +15,8 @@ interface T extends DefaultRootState {
 }
 
 const SearchInput = () => {
+  const [token, setToken] = useState(null || sessionStorage.getItem('token'));
+
   const ref = useRef<HTMLInputElement>(null);
   const todo: any = useSelector<T>((store) => store.todo);
   const store = useSelector<T>((store) => store);
@@ -27,18 +31,30 @@ const SearchInput = () => {
       edite: false,
     };
 
-    // pass new todo
+    // if no text dont add todo!
+    if (!newTodo.text) return;
+    // pass new todo to db
+    if (token !== null) {
+      axios
+        .post(`${HTTP()}/api/addtodos`, { token: token, newTodo: newTodo })
+        .then((response) => {
+          console.log('response from add todo:', response)
+          // setDataFromDb([...response.data.list]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    // pass new todo to redux
     dispach(addNewTodo({ newTodo: newTodo }));
+
     // clean input value
     if (ref.current) {
       ref.current.value = null!;
     }
     return;
   };
-
-  // FIXME: STATE NOT PERSIST PER PAGE
-  // FIXME: PAYLOAD WHAT IT IS ????
-  // FIXME: WHY PAYLOAD ALLWAYS ADDS UP ON TOP
 
   return (
     <div className='flex justify-center mt-20 w-full '>

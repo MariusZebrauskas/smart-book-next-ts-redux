@@ -5,9 +5,7 @@ let router = express.Router();
 
 
 const Routine = require('../models/routine');
-// let auth = require('./veryfyToken');
 
-// midle were to verify token
 
 router.get('/routine', (req, res) => {
     console.log('req:', req.body.id)

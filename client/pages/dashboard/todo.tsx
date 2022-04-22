@@ -8,9 +8,13 @@ import { closeSubmenu } from '../../redux/submenuReducer';
 
 import { userTodos } from '../../objects/todosObj';
 import { fechTodos } from '../../redux/todoReducer';
+import axios from 'axios';
+import { HTTP } from '../../config';
+import { useRouter } from 'next/router';
 
 interface T extends DefaultRootState {
   submenu: boolean;
+  user: any;
   todo: {
     payload: {
       id: number;
@@ -35,25 +39,49 @@ type Todo = {
   compleated: boolean;
   edite: boolean;
 };
-
+// FIXME: protect route / make redirect
 const todo = () => {
   // redux variables
   const dispatch = useDispatch();
   const submenu = useSelector<T>((store) => store.submenu);
   const todo: any = useSelector<T>((store) => store.todo);
   const store = useSelector<T>((store) => store);
-
-  const [editeTodoValue, setEditeTodoValue] = useState(null);
+  const user = useSelector<T>((store) => store.user);
+  const [editeTodoValue, setEditeTodoValue] = useState<any>(null);
+  const router = useRouter();
+  let tokenFromSesion: any;
+  const [token, setToken] = useState(null || sessionStorage.getItem('token'));
+  const [dataFromDB, setDataFromDb] = useState<any>([]);
 
   // on page loads
   useEffect(() => {
-    // set homepage varaibles
-    dispatch(todoPage());
+    // if no user redirect to login
+    if (!user) {
+      router.push('/login');
+      return;
+    }
 
-    // get all todos from dummy data
-    let data: any = userTodos;
-    dispatch(fechTodos(data));
-  }, []);
+    // get todo data
+    if (user) {
+      if (token !== null) {
+        axios
+          .post(`${HTTP()}/api/gettodos`, { token: token })
+          .then((response) => {
+            // send data to redux
+            dispatch(fechTodos([...response.data.list]));
+          })
+
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
+      // set homepage varaibles
+      dispatch(todoPage());
+
+      // get all todos from db
+    }
+  }, [user, token]);
 
   const onMouseEnter = () => {
     if (submenu) {

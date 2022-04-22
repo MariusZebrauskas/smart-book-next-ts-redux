@@ -20,7 +20,7 @@ router.post('/login', (req, res) => {
     if (!userFromDb) {
       return res
         .status(200)
-        .json({ message: 'sorry email or password is invalid', userExists: false });
+        .json({ message: 'sorry email or password is invalid', userExists: false, login: false });
     } else if (userFromDb) {
       // when user is found need to compare password vs bcrypt pass
       /* user data */
@@ -42,7 +42,7 @@ router.post('/login', (req, res) => {
           // if password is incorect return unauthorized
           return res
             .status(200)
-            .json({ success: false, message: 'you are not authorized to access' });
+            .json({ success: false, message: 'you are not authorized to access', login: false });
         }
       });
     } else {

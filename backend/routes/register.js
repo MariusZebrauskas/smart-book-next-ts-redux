@@ -6,6 +6,7 @@ const Routine = require('../models/routine');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const { registerValidation } = require('../validation');
+const sevenDaysModal = require('../objects/obj');
 
 router.post('/register', async (req, res) => {
   // unhashed password
@@ -24,8 +25,7 @@ router.post('/register', async (req, res) => {
   try {
     //   1.use bcrypt function to bcrypt password
     //   2. save and send new user with hashed pass to DB
-    // https://www.youtube.com/watch?v=2jqok-WgelI
-    // time : 43:22
+  
     bcrypt.genSalt(saltRounds, function (err, salt) {
       bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
         // create user using schema with hased password
@@ -48,9 +48,10 @@ router.post('/register', async (req, res) => {
             const routine = new Routine({
               _id: results._id,
             });
-
+            // add routine object three
+            routine.sevenDays.push(sevenDaysModal);
+            // save routine
             routine.save();
-
 
             res
               .status(200)
