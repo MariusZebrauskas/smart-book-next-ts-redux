@@ -16,7 +16,7 @@ router.post('/gettodos', auth, async (req, res) => {
   res.json({ success: true, message: 'private todo', list: list.todos, error: false });
 });
 
-// UPDATE TODOS
+// ADD TODOS
 
 router.post('/addtodos', auth, async (req, res) => {
   let id = req.user._id;

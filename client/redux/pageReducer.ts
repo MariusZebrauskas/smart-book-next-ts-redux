@@ -28,6 +28,11 @@ export const todoPage = () => {
     type: 'todo',
   };
 };
+export const routinePage = () => {
+  return {
+    type: 'routine',
+  };
+};
 export const calendarPage = () => {
   return {
     type: 'calendar',
@@ -63,6 +68,8 @@ export const pageReducer = (state = 'home', action: Actions) => {
       return (state = 'contact');
     case 'unknown':
       return (state = 'unknown');
+    case 'routine':
+      return (state = 'routine');
     case 'dashboard':
       return (state = 'dashboard');
     default:

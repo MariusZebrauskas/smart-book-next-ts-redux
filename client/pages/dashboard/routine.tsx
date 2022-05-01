@@ -1,15 +1,20 @@
+import axios from 'axios';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
 import Day from '../../components/Day';
 import PopUpdate from '../../components/PopUpdate';
 import RoutineHeader from '../../components/RoutineHeader';
+import { HTTP } from '../../config';
 import { sevenDays } from '../../objects/sevendays';
+import { routinePage } from '../../redux/pageReducer';
 import { getDataForSevenDays, updateDataForSevenDays } from '../../redux/sevenDaysReducer';
 
 interface T extends DefaultRootState {
   sevenDays: {
     time: string;
     id: number;
+
     monday: {
       id: number;
       message: string;
@@ -22,12 +27,16 @@ const routine = () => {
   // redux
   const dispatch = useDispatch();
   const days: any = useSelector<T>((state) => state.sevenDays);
+  const { user }: any = useSelector((store) => store);
 
   // state to pop up screen
   const [openPopUp, setOpenPopUp] = useState(false);
-
   const [dataToUpdate, setDataToUpdate] = useState<any>(null);
+  const router = useRouter();
+  const [token, setToken] = useState(null || sessionStorage.getItem('token'));
 
+
+  // pop up handler
   const popUpWindow = (params: string, dataFromScreen: any) => {
     if (params === 'pop') {
       setDataToUpdate(dataFromScreen);
@@ -54,12 +63,43 @@ const routine = () => {
       dispatch(updateDataForSevenDays(update));
     }
   };
-  // on page load
+
+
+
+
+  // on page loads get routine from db
   useEffect(() => {
-    if (sevenDays) {
-      dispatch(getDataForSevenDays(sevenDays));
+    // if no user redirect to login
+    if (!user) {
+      router.push('/login');
+      return;
     }
-  }, []);
+
+    // get todo data
+    if (user) {
+      if (token !== null) {
+        axios
+          .post(`${HTTP()}/api/routine`, { token: token })
+          .then((response) => {
+            // send db data to redux
+            let routineDataFromDb = response.data.routine[0];
+
+            dispatch(getDataForSevenDays(routineDataFromDb));
+          })
+
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
+      // set homepage varaibles
+      dispatch(routinePage());
+
+    }
+  }, [user, token]);
+
+
+
   return (
     <>
       <RoutineHeader />
@@ -68,6 +108,7 @@ const routine = () => {
           <div className='py-2 inline-block min-w-full sm:px-6 lg:px-8'>
             <div className='overflow-x-auto'>
               <table className='min-w-full '>
+                {/* static menu */}
                 <thead>
                   <tr>
                     <th
@@ -120,6 +161,7 @@ const routine = () => {
                     </th>
                   </tr>
                 </thead>
+                {/* dynamic routine menu */}
                 <tbody>
                   {days &&
                     days.map((day: any) => {
@@ -131,6 +173,7 @@ const routine = () => {
           </div>
         </div>
       </div>
+      {/* pop up menu */}
       {openPopUp ? (
         <PopUpdate
           setDataToUpdate={setDataToUpdate}
