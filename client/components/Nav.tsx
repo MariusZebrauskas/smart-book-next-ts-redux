@@ -26,8 +26,8 @@ const Nav = () => {
   //   dispach function
   const dispatch = useDispatch();
 
+  //   open close sub menu
   const burger = () => {
-    //   open close sub menu
     if (subMmenu) {
       return dispatch(closeMenu());
     } else if (!subMmenu) {
@@ -65,8 +65,8 @@ const Nav = () => {
     }
   }, [subMmenu]);
 
+  //   change background to dark on page select
   const changePageMenuBackground = (params: string) => {
-    //   change background to dark on page select
     if (params === 'home') {
       return dispatch(homePage());
     } else if (params === 'todo') {
@@ -79,7 +79,7 @@ const Nav = () => {
       return dispatch(dashboardPage());
     }
   };
-                        console.log('page:', page)
+  console.log('page:', page);
 
   return (
     <nav className='bg-gray-800 '>
@@ -151,7 +151,7 @@ const Nav = () => {
                     Home
                   </a>
                 </Link>
-                <Link href="/dashboard">
+                <Link href='/dashboard'>
                   <a
                     onClick={() => changePageMenuBackground('dashboard')}
                     className={
@@ -164,7 +164,6 @@ const Nav = () => {
                   </a>
                 </Link>
 
-                
                 <Link href='/contact'>
                   <a
                     onClick={() => changePageMenuBackground('contact')}
@@ -180,7 +179,7 @@ const Nav = () => {
               </div>
             </div>
           </div>
-
+          {/* if user is logged in avatar pannel is activated */}
           {user ? (
             <Avatar />
           ) : (
@@ -227,7 +226,7 @@ const Nav = () => {
               Dashboard
             </a>
           </Link>
-         
+
           <Link href='/contact'>
             <a
               className={

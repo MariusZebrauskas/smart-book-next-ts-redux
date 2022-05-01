@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { HTTP } from '../config';
 import { changeTodoList } from '../redux/todoReducer';
 
 type Props = {
@@ -9,17 +11,52 @@ type Props = {
 
 const Popup = ({ text, id }: Props) => {
   const [editeText, setEditeText] = useState(text);
+  const [token, setToken] = useState(null || sessionStorage.getItem('token'));
+
 
   let dispatch = useDispatch();
 
   const changeText = () => {
-    console.log('clicked');
+
     let obj = {
         editeText,
         id: id,
     };
+// change text in DB
+ // send obj to DB then find it and delte it
+ if (token !== null) {
+  axios
+    .post(`${HTTP()}/api/updatetodos`, { token: token, edite: obj })
+    .then((response) => {
+      console.log('response from add todo:', response)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+
+// change text in redux
     dispatch(changeTodoList(obj))
   };
+
+  // on ENTER pres handler
+  const enter = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Trigger the button element with a click
+      return changeText();
+    }
+  };
+
+  useEffect(() => {
+    // listen for enter klicks
+    document.addEventListener('keypress', enter);
+    // clean up function
+    return () => document.removeEventListener('keypress', enter);
+  });
+  
   return (
     <div className='absolute top-0  left-0 right-0 flex justify-between p-3'>
       <input

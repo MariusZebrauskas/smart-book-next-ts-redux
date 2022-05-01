@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DefaultRootState, useDispatch, useSelector } from 'react-redux';
 import { HTTP } from '../config';
 import { addNewTodo } from '../redux/todoReducer';
@@ -25,7 +25,7 @@ const SearchInput = () => {
   const onClick = () => {
     // create new todo
     let newTodo: any = {
-      id: todo.length + 1,
+      id: Math.random(),
       text: ref.current?.value,
       compleated: false,
       edite: false,
@@ -38,7 +38,7 @@ const SearchInput = () => {
       axios
         .post(`${HTTP()}/api/addtodos`, { token: token, newTodo: newTodo })
         .then((response) => {
-          console.log('response from add todo:', response)
+          console.log('response from add todo:', response);
           // setDataFromDb([...response.data.list]);
         })
         .catch((error) => {
@@ -55,6 +55,25 @@ const SearchInput = () => {
     }
     return;
   };
+  
+  // on ENTER pres handler
+  const enter = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Trigger the button element with a click
+      return onClick();
+    }
+  };
+
+  useEffect(() => {
+    // listen for enter klicks
+    document.addEventListener('keypress', enter);
+    // focus on input all time
+    ref.current?.focus();
+    // clean up function
+    return () => document.removeEventListener('keypress', enter);
+  });
 
   return (
     <div className='flex justify-center mt-20 w-full '>
