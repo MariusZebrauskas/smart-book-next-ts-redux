@@ -35,7 +35,6 @@ const routine = () => {
   const router = useRouter();
   const [token, setToken] = useState(null || sessionStorage.getItem('token'));
 
-
   // pop up handler
   const popUpWindow = (params: string, dataFromScreen: any) => {
     if (params === 'pop') {
@@ -60,12 +59,25 @@ const routine = () => {
         message: message,
       };
 
+      // update data in DB
+      if (token !== null) {
+        axios
+          .post(`${HTTP()}/api/update-routine`, { token: token, update: update })
+          .then((response) => {
+            // send db data to redux
+            console.log('response:', response)
+     
+          })
+
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
+      // update data in REDUX
       dispatch(updateDataForSevenDays(update));
     }
   };
-
-
-
 
   // on page loads get routine from db
   useEffect(() => {
@@ -94,11 +106,8 @@ const routine = () => {
 
       // set homepage varaibles
       dispatch(routinePage());
-
     }
   }, [user, token]);
-
-
 
   return (
     <>

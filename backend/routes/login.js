@@ -11,6 +11,7 @@ const saltRounds = 10;
 router.post('/login', (req, res) => {
   // unhashed password
   const myPlaintextPassword = req.body.password;
+ 
   //   Validation
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });

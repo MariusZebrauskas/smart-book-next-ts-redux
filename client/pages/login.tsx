@@ -7,6 +7,7 @@ import axios from 'axios';
 import { HTTP } from '../config';
 import { userLogin } from '../redux/userReducer';
 import { useRouter } from 'next/router';
+import Error from '../components/Error';
 
 interface T extends DefaultRootState {
   submenu: boolean;
@@ -19,6 +20,7 @@ const login = () => {
   const submenu = useSelector<T>((store) => store.submenu);
   const user = useSelector<T>((store) => store.user);
   const router = useRouter();
+  const [error, setError] = useState<null | string>(null);
   // input value
   const [inputs, setInputs] = useState({
     email: '',
@@ -38,6 +40,9 @@ const login = () => {
   };
   // on change INPUT
   const onChange = (e: React.ChangeEvent<HTMLInputElement>, input: string) => {
+    // delete errors
+    setError(null);
+    // fill input fields
     setInputs((prev) => ({
       ...prev,
       [input]: e.target.value,
@@ -46,22 +51,26 @@ const login = () => {
 
   // on submit form value
   const onSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    // prevent defoult
     e.preventDefault();
-
+    // delete errors
+    setError(null);
+    // Login
     axios
       .post(`${HTTP()}/api/login`, inputs)
       .then((response: any) => {
         if (response.data.login === false) {
-          // FIXME: login loading + errors
-          return console.log(response.data.message)
+        
+          return setError(response.data.message);
         }
         let { token } = response.data;
         sessionStorage.setItem('token', token);
         dispatch(userLogin(response.data.user));
       })
       .catch((error) => {
-        console.log(error);
-        router.push('/dashboard');
+        
+    
+        setError(error.message);
       });
   };
 
@@ -121,6 +130,7 @@ const login = () => {
           </Link>
         </div>
       </form>
+      {error && <Error error={error} setError={setError} />}
     </section>
   );
 };
