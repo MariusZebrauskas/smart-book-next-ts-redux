@@ -57,7 +57,10 @@ const login = () => {
     setError(null);
     // Login
     axios
-      .post(`${HTTP()}/api/login`, inputs)
+      .post(`${HTTP()}/api/login`, {
+        email: 'zebrauskas.mar@gmail.com',
+        password: 'Sincila9*',
+      })
       .then((response: any) => {
         if (response.data.login === false) {
         

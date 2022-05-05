@@ -1,4 +1,4 @@
-let realUrl = '';
+
 
 export const HTTP = () => {
   let url;
@@ -7,9 +7,8 @@ export const HTTP = () => {
     return (url = 'http://localhost:5000');
   } else {
     // production code
-    return (url = realUrl);
+    return (url = "http://localhost:5000");
   }
 };
-
 
 

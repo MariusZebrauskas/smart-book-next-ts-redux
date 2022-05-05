@@ -4,10 +4,12 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
+// routes
 const register = require('./routes/register');
 const login = require('./routes/login');
 const routine = require('./routes/routine');
 const privatetodo = require('./routes/todo');
+// cors
 const cors = require('cors');
 
 const app = express();
@@ -23,6 +25,7 @@ app.use(express.json());
 // request loger Midlewere
 app.use((req, res, next) => {
   console.log('Request ip : ' + req.url);
+
   next();
 });
 
@@ -32,7 +35,11 @@ app.use('/api', login);
 app.use('/api', privatetodo);
 app.use('/api', routine);
 
-//FIXME: make encrypted data
+
+app.get('/', (req, res) => {
+  res.status(200).json({ success: true, message: 'test',});
+});
+
 
 // db connect
 mongoose
