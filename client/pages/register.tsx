@@ -73,8 +73,10 @@ const register = () => {
         password: userRegisterData.password,
       })
       .then((response) => {
+        
         dispach(lodingOFF());
-
+        
+        
         let userExist = response.data.userExists;
         // if email is taken
         if (userExist) return setError(response.data.message);
@@ -87,7 +89,7 @@ const register = () => {
           password: '',
           passwordConfirm: '',
         });
-
+        
         // success message
         setSuccess(response.data.message);
         setTimeout(() => {
